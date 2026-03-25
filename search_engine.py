@@ -36,7 +36,8 @@ class QuranHadithSearch:
                         q.nama_surah || ' Ayat ' || q.nomor_ayat as judul,
                         q.terjemah_indonesia as konten,
                         q.text_arab as teks_asli,
-                        (1 - (e.embedding <=> %s::vector)) as skor_relevansi
+                        (1 - (e.embedding <=> %s::vector)) as skor_relevansi,
+                        q.id
                     FROM sumber_quran q
                     JOIN embedding_sumber_quran e ON q.id = e.id
                     ORDER BY e.embedding <=> %s::vector
@@ -54,7 +55,8 @@ class QuranHadithSearch:
                         'HR. Bukhari No. ' || h.nomor_hadits as judul,
                         h.matan_indonesia as konten,
                         h.teks_arab_full as teks_asli,
-                        (1 - (e.embedding <=> %s::vector)) as skor_relevansi
+                        (1 - (e.embedding <=> %s::vector)) as skor_relevansi,
+                        h.id
                     FROM sumber_hadits h
                     JOIN embedding_sumber_hadits e ON h.id = e.id
                     ORDER BY e.embedding <=> %s::vector
@@ -79,7 +81,8 @@ class QuranHadithSearch:
             "judul": row[1],
             "konten": row[2],
             "teks_asli": row[3],
-            "skor_relevansi": round(float(row[4]) * 100, 2) # Dalam persentase
+            "skor_relevansi": round(float(row[4]) * 100, 2), # Dalam persentase
+            "id": row[5]
         }
 
 if __name__ == "__main__":
