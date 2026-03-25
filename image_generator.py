@@ -47,7 +47,7 @@ def generate_share_image(
 
     # 6. Draw Branding
     if show_branding:
-        draw.text((width/2, height - 80), "tanyaquran.id", font=font_brand, fill=(0, 103, 91), anchor="mm")
+        draw.text((width/2, height - 80), "al-Huda", font=font_brand, fill=(0, 103, 91), anchor="mm")
 
     # 7. Export to Bytes
     buf = io.BytesIO()

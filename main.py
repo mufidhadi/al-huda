@@ -5,7 +5,7 @@ import psycopg2
 from search_engine import QuranHadithSearch
 from image_generator import generate_share_image
 
-app = FastAPI(title="Tanya Quran Hadist API", version="1.1")
+app = FastAPI(title="al-Huda API", version="1.1")
 
 # Database Configuration
 DB_CONFIG = {
