@@ -1,0 +1,76 @@
+{
+	"info": {
+		"name": "Tanya Quran Hadist API",
+		"description": "Postman Collection for Tanya Quran Hadist Semantic Search API v1.1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Global Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/search?q=shalat&source=semua&page=1",
+					"protocol": "http",
+					"host": ["127.0.0.1"],
+					"port": "8000",
+					"path": ["api", "v1", "search"],
+					"query": [
+						{"key": "q", "value": "shalat"},
+						{"key": "source", "value": "semua"},
+						{"key": "page", "value": "1"}
+					]
+				}
+			}
+		},
+		{
+			"name": "Quran Detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/quran/153",
+					"protocol": "http",
+					"host": ["127.0.0.1"],
+					"port": "8000",
+					"path": ["api", "v1", "quran", "153"]
+				}
+			}
+		},
+		{
+			"name": "Hadith Detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/hadith/1",
+					"protocol": "http",
+					"host": ["127.0.0.1"],
+					"port": "8000",
+					"path": ["api", "v1", "hadith", "1"]
+				}
+			}
+		},
+		{
+			"name": "Share Image Generator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/share/image?type=quran&id=153&content_mode=both&show_branding=true",
+					"protocol": "http",
+					"host": ["127.0.0.1"],
+					"port": "8000",
+					"path": ["api", "v1", "share", "image"],
+					"query": [
+						{"key": "type", "value": "quran"},
+						{"key": "id", "value": "153"},
+						{"key": "content_mode", "value": "both"},
+						{"key": "show_branding", "value": "true"}
+					]
+				}
+			}
+		}
+	]
+}
