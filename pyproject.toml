@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "psycopg2>=2.9.11",
+    "pytest>=9.0.2",
     "requests>=2.32.5",
+    "sentence-transformers>=5.3.0",
+    "torch>=2.11.0",
     "tqdm>=4.67.3",
 ]

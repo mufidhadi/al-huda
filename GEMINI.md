@@ -1,7 +1,7 @@
 # Tanya Quran Hadist - Project Context
 
 ## IMPORTANT NOTE
-> **setiap menerima prompt dari user:** buat dokumen list pengalaman apa saja yang kita lalui. tuliskan projectnya apa, tech stacknya apa, lalu buat tabel berisi list **SEMUA** task, issue, tried approach, result, dan leson learned. simpan dalam format markdown di folder docs. beri nama dengan format `devlog_dd_mm_yyyy.md` tidak peduli sekecil apapun itu.
+> **setiap menerima prompt dari user:** buat dokumen list pengalaman apa saja yang kita lalui. tuliskan projectnya apa, tech stacknya apa, lalu buat tabel berisi list **SEMUA** task, issue, tried approach, result, leson learned for project, leson learned for general software development, dan leson learned for AI agent prompting technique. simpan dalam format markdown di folder docs. beri nama dengan format `devlog_dd_mm_yyyy.md` tidak peduli sekecil apapun itu.
 
 ## Project Overview
 Proyek **Tanya Quran Hadist** bertujuan untuk membangun sistem kueri dan dataset terintegrasi untuk teks Al-Quran dan Hadist. Fokus saat ini adalah membangun database Al-Quran dan Hadits yang lengkap (teks Arab, terjemah Indonesia, dan Tafsir Kemenag RI) menggunakan PostgreSQL sebagai penyimpanan utama.
