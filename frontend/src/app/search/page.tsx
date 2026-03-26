@@ -55,10 +55,14 @@ function SearchHeader() {
 }
 
 function SearchContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const q = searchParams?.get("q") || "";
   const source = searchParams?.get("source") || "semua";
+  const page = parseInt(searchParams?.get("page") || "1");
+  
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [meta, setMeta] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -66,10 +70,11 @@ function SearchContent() {
       setLoading(true);
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
-        const res = await fetch(`${apiUrl}/api/v1/search?q=${encodeURIComponent(q)}&source=${source}`);
+        const res = await fetch(`${apiUrl}/api/v1/search?q=${encodeURIComponent(q)}&source=${source}&page=${page}`);
         const data = await res.json();
         if (data.status === "success") {
           setResults(data.results);
+          setMeta(data.meta);
         }
       } catch (error) {
         console.error("Search failed:", error);
@@ -78,15 +83,22 @@ function SearchContent() {
       }
     }
     if (q) fetchResults();
-  }, [q, source]);
+  }, [q, source, page]);
+
+  const handlePageChange = (newPage: number) => {
+    router.push(`/search?q=${encodeURIComponent(q)}&source=${source}&page=${newPage}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="max-w-[652px] mx-auto px-4 md:ml-[160px] py-4">
+    <div className="max-w-[652px] mx-auto px-4 md:ml-[160px] py-4 pb-20">
       {loading ? (
-        <p className="text-[#70757a] text-sm animate-pulse">Menghimpun petunjuk dari al-Huda...</p>
+        <p className="text-[#70757a] text-sm animate-pulse">Menghimpun petunjuk dari al-Huda hal. {page}...</p>
       ) : (
         <>
-          <p className="text-[#70757a] text-sm mb-6">Sekitar {results.length} hasil ditemukan.</p>
+          <p className="text-[#70757a] text-sm mb-6">
+            Sekitar {meta?.total_results || 0} hasil ditemukan. (Halaman {page})
+          </p>
           <div className="space-y-8">
             {results.map((res, index) => (
               <div key={`${res.sumber}-${res.id}-${index}`} className="group">
@@ -106,6 +118,45 @@ function SearchContent() {
               </div>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          {meta && meta.total_results > meta.per_page && (
+            <div className="mt-12 flex items-center gap-2 border-t border-gray-100 pt-8">
+              {page > 1 && (
+                <button 
+                  onClick={() => handlePageChange(page - 1)}
+                  className="px-4 py-2 text-[#1a73e8] hover:bg-blue-50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Sebelumnya
+                </button>
+              )}
+              
+              <div className="flex gap-1">
+                {[...Array(Math.min(meta.max_pages, Math.ceil(meta.total_results / meta.per_page)))].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full text-xs transition-colors ${
+                      page === i + 1 
+                        ? "bg-[#1a73e8] text-white font-bold" 
+                        : "text-[#70757a] hover:bg-gray-100"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              {page < Math.min(meta.max_pages, Math.ceil(meta.total_results / meta.per_page)) && (
+                <button 
+                  onClick={() => handlePageChange(page + 1)}
+                  className="px-4 py-2 text-[#1a73e8] hover:bg-blue-50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Berikutnya
+                </button>
+              )}
+            </div>
+          )}
         </>
       )}
     </div>
