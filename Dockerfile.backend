@@ -3,11 +3,11 @@ FROM python:3.12-slim
 # Install uv and system dependencies including fonts
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install fonts for image generation (supporting Arabic and Global characters)
-RUN apt-get update --fix-missing && apt-get install -y --no-install-recommends \
+# Install fonts for image generation
+RUN sed -i 's/deb.debian.org/ftp.us.debian.org/g' /etc/apt/sources.list.d/debian.sources || true && \
+    apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-core \
     fonts-noto-ui-arabic \
-    fonts-noto-mono \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable Bytecode Compilation & Link Mode
