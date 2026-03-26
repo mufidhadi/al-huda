@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,7 @@ interface QuranDetail {
 
 export default function QuranDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id;
   const [data, setData] = useState<QuranDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,13 +47,22 @@ export default function QuranDetailPage() {
   return (
     <main className="min-h-screen bg-white pb-20">
       {/* Detail Header */}
-      <header className="sticky top-0 bg-white border-b border-[#f2f2f2] p-4 flex items-center justify-between z-50">
+      <header className="sticky top-0 bg-white border-b border-[#f2f2f2] p-4 flex items-center gap-4 z-50">
+        <button 
+          onClick={() => router.back()}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="Kembali"
+        >
+          <svg className="w-6 h-6 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="al-Huda" width={28} height={28} />
-          <span className="text-xl font-medium text-[#202124]">al-Huda</span>
+          <span className="hidden md:block text-xl font-medium text-[#202124]">al-Huda</span>
         </Link>
-        <h2 className="text-sm font-medium text-[#70757a]">{data.surah} Ayat {data.nomor_ayat}</h2>
-        <div className="w-10"></div>
+        <div className="h-6 w-[1px] bg-gray-300 mx-1 hidden md:block"></div>
+        <h2 className="text-sm font-medium text-[#70757a] flex-grow">{data.surah} Ayat {data.nomor_ayat}</h2>
       </header>
 
       <article className="max-w-[800px] mx-auto px-6 py-12">

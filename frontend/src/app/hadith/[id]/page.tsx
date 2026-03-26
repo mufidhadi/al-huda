@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,7 @@ interface HadithDetail {
 
 export default function HadithDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id;
   const [data, setData] = useState<HadithDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,12 +46,22 @@ export default function HadithDetailPage() {
 
   return (
     <main className="min-h-screen bg-white pb-20">
-      <header className="sticky top-0 bg-white border-b border-[#f2f2f2] p-4 flex items-center justify-between z-50">
+      <header className="sticky top-0 bg-white border-b border-[#f2f2f2] p-4 flex items-center gap-4 z-50">
+        <button 
+          onClick={() => router.back()}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="Kembali"
+        >
+          <svg className="w-6 h-6 text-[#5f6368]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="al-Huda" width={28} height={28} />
-          <span className="text-xl font-medium text-[#202124]">al-Huda</span>
+          <span className="hidden md:block text-xl font-medium text-[#202124]">al-Huda</span>
         </Link>
-        <h2 className="text-sm font-medium text-[#70757a]">{data.kitab} No. {data.nomor_hadits}</h2>
+        <div className="h-6 w-[1px] bg-gray-300 mx-1 hidden md:block"></div>
+        <h2 className="text-sm font-medium text-[#70757a] flex-grow">{data.kitab} No. {data.nomor_hadits}</h2>
         <div className="px-2 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded uppercase tracking-wider border border-green-100">
           {data.derajat}
         </div>
