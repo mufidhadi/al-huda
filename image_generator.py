@@ -1,6 +1,34 @@
 from PIL import Image, ImageDraw, ImageFont
 import io
 import textwrap
+import os
+
+def get_font(size, is_arabic=False):
+    # Common font paths for Linux and Windows
+    font_paths = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "C:\\Windows\\Fonts\\arial.ttf",
+        "arial.ttf"
+    ]
+    
+    if is_arabic:
+        # Prefer fonts that handle Arabic well if they exist
+        font_paths = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", # Standard on many Linux distros
+            "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
+            "C:\\Windows\\Fonts\\times.ttf",
+            "times.ttf"
+        ] + font_paths
+
+    for path in font_paths:
+        try:
+            return ImageFont.truetype(path, size)
+        except:
+            continue
+    
+    return ImageFont.load_default()
 
 def generate_share_image(
     title: str, 
@@ -14,40 +42,44 @@ def generate_share_image(
     img = Image.new("RGB", (width, height), bg_color)
     draw = ImageDraw.Draw(img)
     
-    # 2. Setup Fonts (Standard Fallbacks)
-    try:
-        # Mencoba menggunakan font sistem
-        font_title = ImageFont.truetype("arial.ttf", 40)
-        font_ar = ImageFont.truetype("arial.ttf", 60) # Note: Idealnya font khusus Naskh
-        font_id = ImageFont.truetype("arial.ttf", 45)
-        font_brand = ImageFont.truetype("arial.ttf", 30)
-    except:
-        font_title = ImageFont.load_default()
-        font_ar = ImageFont.load_default()
-        font_id = ImageFont.load_default()
-        font_brand = ImageFont.load_default()
+    # 2. Setup Fonts
+    font_title = get_font(45)
+    font_ar = get_font(70, is_arabic=True)
+    font_id = get_font(50)
+    font_brand = get_font(35)
 
     # 3. Draw Header (Title)
-    draw.text((width/2, 100), title, font=font_title, fill=(100, 100, 100), anchor="mm")
+    draw.text((width/2, 80), title, font=font_title, fill=(80, 80, 80), anchor="mm")
     
-    current_y = 250
+    # Draw a divider line
+    draw.line([(width*0.1, 150), (width*0.9, 150)], fill=(220, 220, 220), width=2)
+    
+    current_y = 220
+    padding = 80
+    max_text_width = width - (padding * 2)
     
     # 4. Draw Arabic Content
     if content_ar:
-        # Sederhana wrapping untuk Arab (Reverse order normally needed for RTL, 
-        # but Pillow handling depends on version/OS)
-        ar_wrapped = textwrap.fill(content_ar, width=40)
-        draw.multiline_text((width/2, current_y), ar_wrapped, font=font_ar, fill=(0, 0, 0), anchor="ma", align="center")
-        current_y += (len(ar_wrapped.split('\n')) * 80) + 50
+        # Better wrapping calculation based on font size
+        # Approx chars per line for size 70 is about 25-30
+        ar_wrapped = textwrap.fill(content_ar, width=30)
+        draw.multiline_text((width/2, current_y), ar_wrapped, font=font_ar, fill=(0, 0, 0), anchor="ma", align="center", spacing=20)
+        
+        # Calculate height taken by Arabic text
+        lines = ar_wrapped.split('\n')
+        current_y += (len(lines) * 100) + 60
 
     # 5. Draw Indonesian Content
     if content_id:
+        # Approx chars per line for size 50 is about 45-50
         id_wrapped = textwrap.fill(content_id, width=45)
-        draw.multiline_text((width/2, current_y), id_wrapped, font=font_id, fill=(50, 50, 50), anchor="ma", align="center")
+        draw.multiline_text((width/2, current_y), id_wrapped, font=font_id, fill=(60, 60, 60), anchor="ma", align="center", spacing=12)
 
     # 6. Draw Branding
     if show_branding:
-        draw.text((width/2, height - 80), "al-Huda", font=font_brand, fill=(0, 103, 91), anchor="mm")
+        # Draw bottom footer
+        draw.rectangle([(0, height-150), (width, height)], fill=(245, 245, 245))
+        draw.text((width/2, height - 75), "Ditemukan via al-Huda", font=font_brand, fill=(0, 103, 91), anchor="mm")
 
     # 7. Export to Bytes
     buf = io.BytesIO()
