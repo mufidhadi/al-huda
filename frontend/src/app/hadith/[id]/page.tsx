@@ -82,7 +82,10 @@ export default function HadithDetailPage() {
         {/* Share Button */}
         <div className="mt-16 flex justify-center">
           <button 
-            onClick={() => window.open(`http://127.0.0.1:8000${data.share.image_api_url}`, '_blank')}
+            onClick={() => {
+              const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
+              window.open(`${apiUrl}${data.share.image_api_url}`, '_blank');
+            }}
             className="flex items-center gap-2 px-8 py-3 bg-[#1a73e8] text-white rounded-full hover:bg-[#1557b0] transition-colors shadow-lg"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

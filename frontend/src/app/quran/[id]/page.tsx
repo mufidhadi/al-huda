@@ -26,8 +26,10 @@ export default function QuranDetailPage() {
     async function fetchDetail() {
       setLoading(true);
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/v1/quran/${id}`);
-        const json = await res.json();
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
+        const res = await fetch(`${apiUrl}/api/v1/quran/${id}`);
+        const result = await res.json();
+
         if (json.status === "success") setData(json.data);
       } catch (error) {
         console.error("Fetch detail failed:", error);
