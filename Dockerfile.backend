@@ -20,5 +20,5 @@ COPY . .
 
 EXPOSE 8000
 
-# Run using uv to ensure venv is used
-CMD ["uv", "run", "python", "main.py"]
+# Run using uvicorn directly to listen on all interfaces
+CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
