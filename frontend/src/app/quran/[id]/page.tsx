@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ShareModal } from "@/components/ShareModal";
 
 interface QuranDetail {
   id: number;
@@ -22,6 +23,7 @@ export default function QuranDetailPage() {
   const id = params.id;
   const [data, setData] = useState<QuranDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchDetail() {
@@ -89,11 +91,8 @@ export default function QuranDetailPage() {
         {/* Action Button: Share */}
         <div className="mt-12 flex justify-center">
           <button 
-            onClick={() => {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
-              window.open(`${apiUrl}${data.share.image_api_url}`, '_blank');
-            }}
-            className="flex items-center gap-2 px-8 py-3 bg-[#1a73e8] text-white rounded-full hover:bg-[#1557b0] transition-colors shadow-sm"
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center gap-2 px-8 py-3 bg-[#00675b] text-white rounded-full hover:bg-[#004d44] transition-colors shadow-lg shadow-[#00675b]/20"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -112,6 +111,16 @@ export default function QuranDetailPage() {
           )}
         </div>
       </article>
+
+      <ShareModal 
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        data={{
+          title: `${data.surah} Ayat ${data.nomor_ayat}`,
+          arabic: data.teks_arab,
+          translation: data.terjemah
+        }}
+      />
     </main>
   );
 }

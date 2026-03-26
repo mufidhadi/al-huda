@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ShareModal } from "@/components/ShareModal";
 
 interface HadithDetail {
   id: number;
@@ -22,6 +23,7 @@ export default function HadithDetailPage() {
   const id = params.id;
   const [data, setData] = useState<HadithDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchDetail() {
@@ -95,11 +97,8 @@ export default function HadithDetailPage() {
         {/* Share Button */}
         <div className="mt-16 flex justify-center">
           <button 
-            onClick={() => {
-              const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
-              window.open(`${apiUrl}${data.share.image_api_url}`, '_blank');
-            }}
-            className="flex items-center gap-2 px-8 py-3 bg-[#1a73e8] text-white rounded-full hover:bg-[#1557b0] transition-colors shadow-lg"
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center gap-2 px-8 py-3 bg-[#00675b] text-white rounded-full hover:bg-[#004d44] transition-colors shadow-lg shadow-[#00675b]/20"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -108,6 +107,16 @@ export default function HadithDetailPage() {
           </button>
         </div>
       </article>
+
+      <ShareModal 
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        data={{
+          title: `${data.kitab} No. ${data.nomor_hadits}`,
+          arabic: data.teks_arab,
+          translation: data.matan
+        }}
+      />
     </main>
   );
 }
