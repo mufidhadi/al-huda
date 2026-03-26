@@ -1,15 +1,20 @@
 import psycopg2
 import time
+import os
 from typing import List, Dict, Tuple
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer
 from psycopg2.extras import execute_values
+from dotenv import load_dotenv
+
+# Muat variabel lingkungan dari file .env
+load_dotenv()
 
 # Database Configuration
-DB_HOST = "DB_HOST_PLACEHOLDER"
-DB_NAME = "tanya_quran_hadist"
-DB_USER = "DB_USER_PLACEHOLDER"
-DB_PASS = "DB_PASS_PLACEHOLDER"
+DB_HOST = os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER")
+DB_NAME = os.getenv("DB_NAME", "tanya_quran_hadist")
+DB_USER = os.getenv("DB_USER", "DB_USER_PLACEHOLDER")
+DB_PASS = os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER")
 
 # Model Configuration
 # E5 model requires prefix 'passage: ' for documents to be indexed

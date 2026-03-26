@@ -1,18 +1,23 @@
 from fastapi import FastAPI, Query, HTTPException, Response
 from typing import Optional
 import re
+import os
 import psycopg2
 from search_engine import QuranHadithSearch
 from image_generator import generate_share_image
+from dotenv import load_dotenv
+
+# Muat variabel lingkungan dari file .env
+load_dotenv()
 
 app = FastAPI(title="al-Huda API", version="1.1")
 
 # Database Configuration
 DB_CONFIG = {
-    "host": "DB_HOST_PLACEHOLDER",
-    "user": "DB_USER_PLACEHOLDER",
-    "password": "DB_PASS_PLACEHOLDER",
-    "dbname": "tanya_quran_hadist"
+    "host": os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER"),
+    "user": os.getenv("DB_USER", "DB_USER_PLACEHOLDER"),
+    "password": os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER"),
+    "dbname": os.getenv("DB_NAME", "tanya_quran_hadist")
 }
 
 # Inisialisasi Search Engine

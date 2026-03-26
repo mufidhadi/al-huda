@@ -1,6 +1,17 @@
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+# Muat variabel lingkungan dari file .env
+load_dotenv()
+
+DB_HOST = os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER")
+DB_USER = os.getenv("DB_USER", "DB_USER_PLACEHOLDER")
+DB_PASS = os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER")
+DB_NAME = os.getenv("DB_NAME", "tanya_quran_hadist")
+
 try:
-    conn = psycopg2.connect(host='DB_HOST_PLACEHOLDER', user='DB_USER_PLACEHOLDER', password='DB_PASS_PLACEHOLDER', dbname='tanya_quran_hadist')
+    conn = psycopg2.connect(host=DB_HOST, user=DB_USER, password=DB_PASS, dbname=DB_NAME)
     cur = conn.cursor()
     cur.execute("SELECT name, default_version, installed_version FROM pg_available_extensions WHERE name = 'vector'")
     res = cur.fetchone()

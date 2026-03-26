@@ -1,12 +1,17 @@
 import pytest
+import os
 from search_engine import QuranHadithSearch
+from dotenv import load_dotenv
+
+# Muat variabel lingkungan dari file .env
+load_dotenv()
 
 # Database Configuration
 DB_CONFIG = {
-    "host": "DB_HOST_PLACEHOLDER",
-    "user": "DB_USER_PLACEHOLDER",
-    "password": "DB_PASS_PLACEHOLDER",
-    "dbname": "tanya_quran_hadist"
+    "host": os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER"),
+    "user": os.getenv("DB_USER", "DB_USER_PLACEHOLDER"),
+    "password": os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER"),
+    "dbname": os.getenv("DB_NAME", "tanya_quran_hadist")
 }
 
 @pytest.fixture(scope="module")

@@ -12,10 +12,10 @@ services:
       - hf_cache:/root/.cache/huggingface
     environment:
       - PYTHONUNBUFFERED=1
-      - DB_HOST=DB_HOST_PLACEHOLDER
-      - DB_NAME=tanya_quran_hadist
-      - DB_USER=DB_USER_PLACEHOLDER
-      - DB_PASS=DB_PASS_PLACEHOLDER
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     restart: always
 
   frontend:

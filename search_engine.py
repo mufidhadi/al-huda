@@ -1,10 +1,23 @@
 import psycopg2
+import os
 from typing import List, Dict, Optional
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+
+# Muat variabel lingkungan dari file .env
+load_dotenv()
 
 class QuranHadithSearch:
-    def __init__(self, db_config: Dict):
-        self.db_config = db_config
+    def __init__(self, db_config: Dict = None):
+        if db_config is None:
+            self.db_config = {
+                "host": os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER"),
+                "user": os.getenv("DB_USER", "DB_USER_PLACEHOLDER"),
+                "password": os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER"),
+                "dbname": os.getenv("DB_NAME", "tanya_quran_hadist")
+            }
+        else:
+            self.db_config = db_config
         # Load model secara singleton untuk efisiensi
         print("🧠 Initializing Search Engine (Loading Local AI Model)...")
         self.model = SentenceTransformer('intfloat/multilingual-e5-small')
@@ -87,14 +100,7 @@ class QuranHadithSearch:
 
 if __name__ == "__main__":
     # Test script sederhana
-    config = {
-        "host": "DB_HOST_PLACEHOLDER",
-        "user": "DB_USER_PLACEHOLDER",
-        "password": "DB_PASS_PLACEHOLDER",
-        "dbname": "tanya_quran_hadist"
-    }
-    
-    engine = QuranHadithSearch(config)
+    engine = QuranHadithSearch()
     query = input("Ketik apa yang ingin Anda cari (e.g. 'cara shalat'): ")
     sumber_pilihan = input("Pilih sumber (alquran/hadist/semua) [default: semua]: ") or "semua"
     
