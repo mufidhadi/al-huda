@@ -4,19 +4,16 @@ import textwrap
 import os
 
 def get_font(size, is_arabic=False):
-    # Common font paths inside Debian/Ubuntu containers
+    # Use fonts bundled with the project
     font_paths = [
-        "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "NotoSans-Regular.ttf",
         "arial.ttf"
     ]
     
     if is_arabic:
-        # Prioritize Noto Sans Arabic for Arabic text
+        # Prioritize bundled Noto Sans Arabic
         font_paths = [
-            "/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf",
-            "/usr/share/fonts/truetype/noto/NotoNaskhArabic-Regular.ttf",
+            "NotoSansArabic-Regular.ttf",
         ] + font_paths
 
     for path in font_paths:
