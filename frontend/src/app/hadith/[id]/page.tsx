@@ -26,9 +26,11 @@ export default function HadithDetailPage() {
     async function fetchDetail() {
       setLoading(true);
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/v1/hadith/${id}`);
-        const json = await res.json();
-        if (json.status === "success") setData(json.data);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
+        const res = await fetch(`${apiUrl}/api/v1/hadith/${id}`);
+        const result = await res.json();
+
+        if (result.status === "success") setData(result.data);
       } catch (error) {
         console.error("Fetch hadith failed:", error);
       } finally {
