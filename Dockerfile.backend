@@ -1,7 +1,14 @@
 FROM python:3.12-slim
 
-# Install uv
+# Install uv and system dependencies including fonts
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Install fonts for image generation (supporting Arabic and Global characters)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-noto-core \
+    fonts-noto-ui-arabic \
+    fonts-noto-mono \
+    && rm -rf /var/lib/apt/lists/*
 
 # Enable Bytecode Compilation & Link Mode
 ENV UV_COMPILE_BYTECODE=1
