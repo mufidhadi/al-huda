@@ -14,10 +14,38 @@ interface SearchResult {
   detail_url: string;
 }
 
+function SearchHeader() {
+  const searchParams = useSearchParams();
+  const q = searchParams?.get("q") || "";
+
+  return (
+    <header className="sticky top-0 bg-white border-b border-[#f2f2f2] z-50">
+      <div className="flex items-center p-4 gap-4 max-w-[1200px]">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="al-Huda" width={32} height={32} />
+          <span className="hidden md:block text-2xl font-medium text-[#202124]">al-Huda</span>
+        </Link>
+        <div className="flex-grow max-w-[692px] relative">
+          <div className="flex items-center px-4 py-2 rounded-full border border-[#dfe1e5] shadow-sm">
+            <input
+              type="text"
+              className="flex-grow bg-transparent outline-none text-base"
+              defaultValue={q}
+            />
+            <svg className="w-5 h-5 text-[#4285f4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 function SearchContent() {
   const searchParams = useSearchParams();
-  const q = searchParams.get("q") || "";
-  const source = searchParams.get("source") || "semua";
+  const q = searchParams?.get("q") || "";
+  const source = searchParams?.get("source") || "semua";
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +53,8 @@ function SearchContent() {
     async function fetchResults() {
       setLoading(true);
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/v1/search?q=${encodeURIComponent(q)}&source=${source}`);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api-alhuda.masmuf.cloud";
+        const res = await fetch(`${apiUrl}/api/v1/search?q=${encodeURIComponent(q)}&source=${source}`);
         const data = await res.json();
         if (data.status === "success") {
           setResults(data.results);
@@ -74,29 +103,8 @@ function SearchContent() {
 export default function SearchPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Search Header */}
-      <header className="sticky top-0 bg-white border-b border-[#f2f2f2] z-50">
-        <div className="flex items-center p-4 gap-4 max-w-[1200px]">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="al-Huda" width={32} height={32} />
-            <span className="hidden md:block text-2xl font-medium text-[#202124]">al-Huda</span>
-          </Link>
-          <div className="flex-grow max-w-[692px] relative">
-            <div className="flex items-center px-4 py-2 rounded-full border border-[#dfe1e5] shadow-sm">
-              <input
-                type="text"
-                className="flex-grow bg-transparent outline-none text-base"
-                defaultValue={useSearchParams()?.get("q") || ""}
-              />
-              <svg className="w-5 h-5 text-[#4285f4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <Suspense fallback={<p className="p-10 text-center">Memuat hasil...</p>}>
+      <Suspense fallback={<p className="p-10 text-center">Memuat antarmuka pencarian...</p>}>
+        <SearchHeader />
         <SearchContent />
       </Suspense>
     </main>
