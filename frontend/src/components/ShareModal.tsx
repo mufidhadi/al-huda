@@ -110,11 +110,18 @@ export function ShareModal({ isOpen, onClose, data }: ShareModalProps) {
               </div>
 
               {/* Main Content */}
-              <div className="flex-1 flex flex-col justify-center items-center gap-6 overflow-hidden">
-                <p className="text-3xl leading-[1.8] text-gray-900 font-serif line-clamp-6 px-2" dir="rtl">
+              <div className="flex-1 flex flex-col justify-center items-center gap-4 overflow-hidden">
+                <p 
+                  className="leading-[1.8] text-gray-900 font-serif px-2" 
+                  dir="rtl"
+                  style={{ fontSize: arabicFontSize }}
+                >
                   {data.arabic}
                 </p>
-                <p className="text-sm text-gray-600 leading-relaxed italic line-clamp-5 px-4">
+                <p 
+                  className="text-gray-600 leading-relaxed italic px-4"
+                  style={{ fontSize: translationFontSize }}
+                >
                   "{data.translation}"
                 </p>
               </div>
@@ -143,6 +150,22 @@ export function ShareModal({ isOpen, onClose, data }: ShareModalProps) {
             className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50"
           >
             <Download size={18} />
+            Simpan
+          </button>
+          <button
+            onClick={handleShare}
+            disabled={isGenerating}
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#00675b] hover:bg-[#004d44] text-white rounded-xl font-bold shadow-lg shadow-[#00675b]/20 transition-all active:scale-95 disabled:opacity-50"
+          >
+            <Share2 size={18} />
+            Bagikan
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+         <Download size={18} />
             Simpan
           </button>
           <button
