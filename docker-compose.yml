@@ -6,8 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: tqh-backend
-    ports:
-      - "8000:8000"
     volumes:
       - hf_cache:/root/.cache/huggingface
     environment:
@@ -16,6 +14,14 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tqh-backend.rule=Host(`api-alhuda.masmuf.cloud`)"
+      - "traefik.http.routers.tqh-backend.entrypoints=websecure"
+      - "traefik.http.routers.tqh-backend.tls.certresolver=myresolver"
+      - "traefik.http.services.tqh-backend.loadbalancer.server.port=8000"
     restart: always
 
   frontend:
@@ -23,13 +29,23 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     container_name: tqh-frontend
-    ports:
-      - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=https://api-alhuda.masmuf.cloud
     depends_on:
       - backend
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tqh-frontend.rule=Host(`al-huda.masmuf.cloud`)"
+      - "traefik.http.routers.tqh-frontend.entrypoints=websecure"
+      - "traefik.http.routers.tqh-frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.tqh-frontend.loadbalancer.server.port=3000"
     restart: always
+
+networks:
+  web:
+    external: true
 
 volumes:
   hf_cache:
