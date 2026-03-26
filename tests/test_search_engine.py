@@ -8,10 +8,10 @@ load_dotenv()
 
 # Database Configuration
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER"),
-    "user": os.getenv("DB_USER", "DB_USER_PLACEHOLDER"),
-    "password": os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER"),
-    "dbname": os.getenv("DB_NAME", "tanya_quran_hadist")
+    "host": os.getenv("DB_HOST"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASS"),
+    "dbname": os.getenv("DB_NAME")
 }
 
 @pytest.fixture(scope="module")

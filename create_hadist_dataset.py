@@ -12,10 +12,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database Configuration
-DB_HOST = os.getenv("DB_HOST", "DB_HOST_PLACEHOLDER")
-DB_NAME = os.getenv("DB_NAME", "tanya_quran_hadist")
-DB_USER = os.getenv("DB_USER", "DB_USER_PLACEHOLDER")
-DB_PASS = os.getenv("DB_PASS", "DB_PASS_PLACEHOLDER")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
 
 # Global Session for Connection Pooling
 http_session = requests.Session()
