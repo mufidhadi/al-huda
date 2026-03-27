@@ -21,12 +21,32 @@ export function ShareModal({ isOpen, onClose, data }: ShareModalProps) {
 
   if (!isOpen) return null;
 
+  // Dynamic font sizing logic
+  const getArabicFontSize = (text: string) => {
+    const len = text.length;
+    if (len < 100) return '1.875rem'; // text-3xl
+    if (len < 200) return '1.5rem';   // text-2xl
+    if (len < 400) return '1.25rem';  // text-xl
+    return '1.125rem';                // text-lg
+  };
+
+  const getTranslationFontSize = (text: string) => {
+    const len = text.length;
+    if (len < 200) return '0.875rem'; // text-sm
+    if (len < 400) return '0.75rem';  // text-xs
+    return '0.65rem';                 // smaller
+  };
+
+  const arabicFontSize = getArabicFontSize(data.arabic);
+  const translationFontSize = getTranslationFontSize(data.translation);
+
   const handleDownload = async () => {
     if (!contentRef.current) return;
     setIsGenerating(true);
     
     try {
       const canvas = await html2canvas(contentRef.current, {
+        // @ts-ignore
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff'
@@ -50,6 +70,7 @@ export function ShareModal({ isOpen, onClose, data }: ShareModalProps) {
 
     try {
       const canvas = await html2canvas(contentRef.current, {
+        // @ts-ignore
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff'
@@ -150,22 +171,6 @@ export function ShareModal({ isOpen, onClose, data }: ShareModalProps) {
             className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50"
           >
             <Download size={18} />
-            Simpan
-          </button>
-          <button
-            onClick={handleShare}
-            disabled={isGenerating}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#00675b] hover:bg-[#004d44] text-white rounded-xl font-bold shadow-lg shadow-[#00675b]/20 transition-all active:scale-95 disabled:opacity-50"
-          >
-            <Share2 size={18} />
-            Bagikan
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-         <Download size={18} />
             Simpan
           </button>
           <button
